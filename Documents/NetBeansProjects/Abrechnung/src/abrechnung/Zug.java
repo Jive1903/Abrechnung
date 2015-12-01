@@ -20,10 +20,10 @@ import java.util.regex.Pattern;
     public String bahnhof;	
     public int wagenanz;
     public int rhWust;  
-    public int weiterleitung; 
-    public int zugabfertigung;
-    public int lotse; 
-    public int rangier; 
+    public boolean weiterleitung; 
+    public boolean zugabfertigung;
+    public boolean lotse; 
+    public boolean rangier; 
     public boolean fehler;
     public String spedition ="";
     public boolean abrechnen;
@@ -88,11 +88,12 @@ import java.util.regex.Pattern;
         bd= bemerkung.substring(6,7);
         be= bemerkung.substring(8,9);
         
+        //if (ba ==1) 
         rhWust = stringToint(ba);
-        weiterleitung= stringToint(bb);
-        zugabfertigung= stringToint(bc);
-        lotse= stringToint(bd);
-        rangier= stringToint(be);
+        if ("1".equals(bb)){weiterleitung= true;} else{weiterleitung=false;}
+        if ("1".equals(bc)) {zugabfertigung= true;} else{zugabfertigung=false;}
+        if ("1".equals(bd)){lotse= true;}else{lotse=false;}
+        if ("1".equals(be)){rangier= true;}else{rangier=false;}
             }        
         }
     
