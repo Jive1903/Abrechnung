@@ -5,21 +5,26 @@
  */
 package GUI.Interface;
 
+import abrechnung.DatenReader;
+import abrechnung.MyList;
+import abrechnung.Spedition;
+import abrechnung.Zug;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import jxl.read.biff.BiffException;
 
 /**
  *
  * @author MasnikJ
  */
 public class GUIStart extends javax.swing.JFrame {
-
+    
+MyList<Spedition> spedition;
+MyList<Zug> zuege;
+Map<String, String> bahnhofMap;
     /**
      * Creates new form GUIStart
      */
@@ -44,7 +49,6 @@ public class GUIStart extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Start");
@@ -69,6 +73,7 @@ public class GUIStart extends javax.swing.JFrame {
             }
         });
 
+        BDSinput.setText("C:\\Users\\MasnikJ\\Documents\\Abrechnung\\BDS.xls");
         BDSinput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BDSinputActionPerformed(evt);
@@ -83,18 +88,16 @@ public class GUIStart extends javax.swing.JFrame {
         });
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Januar", "Feburar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Berechnung Start");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
-            }
-        });
-
-        jButton5.setText("Serienbrief erstellen");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
             }
         });
 
@@ -116,9 +119,8 @@ public class GUIStart extends javax.swing.JFrame {
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
                                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(BDSinput))
+                                    .addComponent(BDSinput, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
@@ -142,9 +144,7 @@ public class GUIStart extends javax.swing.JFrame {
                     .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
@@ -175,59 +175,52 @@ public class GUIStart extends javax.swing.JFrame {
         
         if (jc.showOpenDialog(null)==JFileChooser.APPROVE_OPTION){
             BDSinput.setText(jc.getSelectedFile().toString());
-        }  
-    }                 
+        }               
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void BDSinputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDSinputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BDSinputActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
-
+    
+    
+    
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-   
-        try {
-            // TODO add your handling code here:
-             zr = new ZugReader(BDSinput.getText());
-            
-             dr = new DatenReader("C:\\Users\\MasnikJ\\Documents\\Abrechnung\\Daten.xls");
-            
-            BahnhofReader br = new BahnhofReader("C:\\Users\\MasnikJ\\Documents\\Abrechnung\\Daten.xls");
-            for (Zug z : zr.liste) {
-                z.Spedition = br.getSpedition(z.Bahnhof);
-                z.splitBemerkung();
-                if (!z.Fehler) {
-                    zr.fehlerListe.add(z);
-                }
-            }
-            ZugTableModel ztm = new ZugTableModel(zr.fehlerListe);
-            GUIFehlerE fb = new GUIFehlerE(zr.liste);
-            //  TabelCellEditor tce = new TabelCellEditor();
-            
-            fb.jTableFehlerBemerkung.setModel(ztm);
-            
-            List<BahnhofItem> bahnhofList = new ArrayList<BahnhofItem>();
-            
-            for (String s : br.getMap().values()) {
-                BahnhofItem b = new BahnhofItem(s);
-                if (!bahnhofList.contains(b)&&!b.value.isEmpty()) {
-                    bahnhofList.add(b);
-                }
-                bahnhofList.sort(new BahnhofItemComparator());
-            }
-
-            fb.jTableFehlerBemerkung.setDefaultEditor(BahnhofItem.class, new DefaultCellEditor(new JComboBox(bahnhofList.toArray())));
-            
-            fb.setVisible(true);
-           
-        } catch (IOException ex) {
-            Logger.getLogger(GUIstart.class.getName()).log(Level.SEVERE, null, ex);
+        
+    try {
+        DatenReader dr = new DatenReader();
+        
+        spedition =dr.readerSpedtion("C:\\Users\\MasnikJ\\Documents\\Abrechnung\\Daten.xls");
+        
+        for(Spedition s : spedition.list){
+            s.abmonat = jComboBox1.getSelectedItem().toString(); 
         }
-    }          // TODO add your handling code here:
+        
+        zuege = dr.readerZug(BDSinput.getText());
+        
+        for(Zug z : zuege.list){
+            z.abmonat = jComboBox1.getSelectedItem().toString(); 
+        }
+        
+        bahnhofMap = dr.readerBahnhof("C:\\Users\\MasnikJ\\Documents\\Abrechnung\\Daten.xls");
+        GUISpeditionsAuswahl sa = new GUISpeditionsAuswahl(spedition, zuege, bahnhofMap, "Eingang", true);
+        for(Zug z: zuege.list){
+            z.spedition = bahnhofMap.get(z.bahnhof);
+            z.fehler = z.testen(z.bemerkung);
+        }
+        sa.setVisible(true);
+        
+        this.setVisible(false);
+    } catch (IOException ex) {
+        Logger.getLogger(GUIStart.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (BiffException ex) {
+        Logger.getLogger(GUIStart.class.getName()).log(Level.SEVERE, null, ex);
+    }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -264,15 +257,17 @@ public class GUIStart extends javax.swing.JFrame {
         });
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField BDSinput;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
+
+
 }

@@ -5,17 +5,17 @@
  */
 package abrechnung;
 
+import java.util.Comparator;
+
 /**
  *
  * @author MasnikJ
  */
-public class Abrechnung {
+public class BahnhofItemComparator implements Comparator<BahnhofItem>{
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        //  TODO code application logic here
+    @Override
+    public int compare(BahnhofItem o1, BahnhofItem o2) {
+        return o1.value.compareTo(o2.value);
     }
     
 }

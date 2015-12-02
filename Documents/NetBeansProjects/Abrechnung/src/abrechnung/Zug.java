@@ -29,13 +29,14 @@ import java.util.regex.Pattern;
     public boolean abrechnen;
     public double infrapreis;
     public double bremspreis;
-    public double ruhWupreise;
+    public double rhWupreise;
     public double wustKts;
     public double weiterpreis;
     public double zugabpreis;
     public double lotspreis; 
     public double rangierarbeitpreis;
     public double gespreis;
+    public String abmonat;
     
     
     /**
@@ -90,10 +91,10 @@ import java.util.regex.Pattern;
         
         //if (ba ==1) 
         rhWust = stringToint(ba);
-        if ("1".equals(bb)){weiterleitung= true;} else{weiterleitung=false;}
-        if ("1".equals(bc)) {zugabfertigung= true;} else{zugabfertigung=false;}
-        if ("1".equals(bd)){lotse= true;}else{lotse=false;}
-        if ("1".equals(be)){rangier= true;}else{rangier=false;}
+        weiterleitung = "1".equals(bb);
+        zugabfertigung = "1".equals(bc);
+        lotse = "1".equals(bd);
+        rangier = "1".equals(be);
             }        
         }
     
@@ -102,7 +103,8 @@ import java.util.regex.Pattern;
         Pattern p = Pattern.compile("[0-2]\\/[0-1]\\/[0-1]\\/[0-1]\\/[0-1].*");
         Matcher m = p.matcher(value);
         
-        if (spedition==""){
+        
+        if ("".equals(spedition)){
             return false;
         }
             return m.matches();
@@ -118,7 +120,7 @@ import java.util.regex.Pattern;
     public String toString(){  
         
         // Gesamtpreis im Serienbrief - Format überprüfen
-         return  spedition + "\t" + zugNr + "\t" + infrapreis + "\t" + ruhWupreise + "\t" + wustKts + "\t" + bremspreis + "\t" + lotspreis + "\t" + datum + "\t" + rangierarbeitpreis + "\t" + zugabpreis + "\t" + weiterpreis + "\t" + gespreis + "!";
+         return  spedition + "\t" + zugNr + "\t" + infrapreis + "\t" + rhWupreise + "\t" + wustKts + "\t" + bremspreis + "\t" + lotspreis + "\t" + datum + "\t" + rangierarbeitpreis + "\t" + zugabpreis + "\t" + weiterpreis + "\t" + gespreis + "!";
     }
    }
 

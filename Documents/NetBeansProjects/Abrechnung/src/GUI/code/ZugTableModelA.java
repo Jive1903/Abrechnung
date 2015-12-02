@@ -5,6 +5,7 @@
  */
 package GUI.code;
 
+import abrechnung.BahnhofItem;
 import abrechnung.Zug;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
@@ -60,11 +61,14 @@ public class ZugTableModelA extends AbstractTableModel{
             // Spaltennamen
             case 0: return "Nr.";
             case 1: return "ZugNr";
-         //   case 2: return "Wochentag";
-            case 2: return "Abfahrtszeit";
-            case 3: return "Spedition";   
-            case 4: return "Umlaus RH-Wüst";
-            case 5: return "Bremspreis";
+            case 2: return "Wochentag";
+            case 3: return "Abfahrtszeit";
+            case 4: return "Spedition";   
+            case 5: return "Umlauf RH-Wüst";
+            case 6: return "Bremspreis";
+            case 7: return "Zugabfertigung";
+            case 8: return "Lotse";
+            case 9: return "Rangierarbeit";
             default: return "";   
         }
     }
@@ -88,4 +92,3 @@ public class ZugTableModelA extends AbstractTableModel{
 }
 
  
-}

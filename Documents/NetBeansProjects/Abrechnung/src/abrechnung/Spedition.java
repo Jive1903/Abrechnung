@@ -30,6 +30,7 @@ public class Spedition {
     public double lotse; 
     public double rangierarbeit;
       // Daten
+    public String spedition;
     public String firmenname;
     public String kundennr;
     public String adresse1;
@@ -44,17 +45,18 @@ public class Spedition {
     public String zahlung;
     public String hinweis; 
     public double gesamtpreis = 0;
-    public String abmonat = "Oktober"; // abfrage auf der Startseite
-    public boolean eAbrechnen;
-    public boolean aAbrechnen;
+    public String abmonat; // abfrage auf der Startseite
+    public boolean eAbrechnen= true;
+    public boolean aAbrechnen=true;
     public double eGesamtpreis=0;
-    public double aGesamtkosten=0;
+    public double aGesamtpreis=0;
+    public double infrapreis=50;
     
     
    @Override
     public String toString(){  
         
         // Gesamtpreis im Serienbrief - Format überprüfen
-         return kundennr + "\t" + firmenname + "\t" + adresse1 + "\t" + adresse2 + "\t" +adresse3 + "\t" + adresse4 + "\t" + bestellnr + "\t" + materialnr + "\t" +kostenstelle + "\t" + ((double)Math.round(gesamtpreis*100)/100) + "\t" + ustKennzeichen + "\t" + zuUST + "\t" + abmonat + "\t" + zahlung + "\t" + hinweis + "!";
+         return kundennr + "\t" + firmenname + "\t" + adresse1 + "\t" + adresse2 + "\t" +adresse3 + "\t" + adresse4 + "\t" + bestellnr + "\t" + materialnr + "\t" +kostenstelle + "\t" + ((double)Math.round((eGesamtpreis+aGesamtpreis)*100)/100) + "\t" + ustKennzeichen + "\t" + zuUST + "\t" + abmonat + "\t" + zahlung + "\t" + hinweis + "!";
     }
 }

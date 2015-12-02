@@ -6,71 +6,40 @@
 package GUI.Interface;
 
 import GUI.code.SpeditionTableModel;
-import GUI.code.ZugTableModelE;
-import abrechnung.BahnhofItem;
-import abrechnung.BahnhofItemComparator;
 import abrechnung.Berechnung;
 import abrechnung.MyList;
 import abrechnung.Spedition;
 import abrechnung.Zug;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 
 /**
  *
  * @author MasnikJ
  */
+public class GUISpeditionsAuswahl extends javax.swing.JFrame {
 
-public class GUIFehlerE extends javax.swing.JFrame {
-    List<BahnhofItem> bahnhofList = new ArrayList<BahnhofItem>();
-    ZugTableModelE ztme;
-    
     MyList<Spedition> speditionen;
     MyList<Zug> zuege;
     Map<String,String> bahnhofMap;
     String text;
     boolean e;
+    
     /**
-     * Creates new form GUIFehlerE
+     * Creates new form SpeditionsAuswahl
      */
-    public GUIFehlerE(MyList<Spedition> speditionen, MyList<Zug> zuege, Map<String,String> bahnhofMap, String text, boolean e) {
+    public GUISpeditionsAuswahl(MyList<Spedition> speditionen, MyList<Zug> zuege, Map<String,String> bahnhofMap, String text, boolean e) {
         initComponents();
         this.speditionen = speditionen;
         this.zuege = zuege;
         this.bahnhofMap = bahnhofMap;
         this.text = text;
         this.e = e;
-        
-        
-        MyList<Zug> fehlerListe = new MyList<>();
-        
-        for(Zug z: zuege.list){
-            if(e&&!z.fehler&&"e".equals(z.typ)){
-                fehlerListe.add(z);
-            }
-            if(!e&&!z.fehler&&"a".equals(z.typ)){
-                fehlerListe.add(z);
-            }
-        }
-        
-        
-        for (String s : bahnhofMap.values()) {
-                BahnhofItem b = new BahnhofItem(s);
-                if (!bahnhofList.contains(b)&&!b.value.isEmpty()) {
-                    bahnhofList.add(b);
-                }
-                bahnhofList.sort(new BahnhofItemComparator());
-            }
-
-            jTable1.setDefaultEditor(BahnhofItem.class, new DefaultCellEditor(new JComboBox(bahnhofList.toArray())));
-            
-        
-        ztme = new ZugTableModelE(fehlerListe);
-        jTable1.setModel(ztme);
+        SpeditionTableModel stm = new SpeditionTableModel(speditionen,e);
+        jTable1.setModel(stm);
+        jTable1.setDefaultEditor(Boolean.class, new DefaultCellEditor(new JCheckBox()));
+        jLabel1.setText(text);
     }
 
     /**
@@ -85,11 +54,13 @@ public class GUIFehlerE extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Speditionen");
 
-        jLabel1.setText("Überprüfen Sie bitte folgende Züge bzgl. Bemerkungsfeld und Spedition.");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -104,6 +75,8 @@ public class GUIFehlerE extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        jLabel2.setText("Auswahl der Speditionen, die abrechnet werden soll:");
+
         jButton1.setText("Speichern");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,56 +89,43 @@ public class GUIFehlerE extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(jButton1)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
+                .addGap(42, 42, 42)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
                 .addComponent(jButton1)
-                .addGap(41, 41, 41))
+                .addGap(33, 33, 33))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        for(Zug z: ztme.list.list){
-            z.fehler = z.testen(z.bemerkung);
-        }   
-        int i = ztme.list.list.size()-1;
-        while(i>=0){
-            Zug z = ztme.list.list.get(i);
-            if(z.fehler){
-                ztme.list.list.remove(z);
-            }
-            i--;
-                
-        }
-        jTable1.updateUI();
-        //jTable1.setModel(ztme);
-        if(ztme.list.list.isEmpty()){
-            Berechnung.berechnenEingang(zuege, speditionen);
-            setVisible(false);
+        setVisible(false);   
+        if(e){
+            GUIFehlerE f = new GUIFehlerE(speditionen, zuege, bahnhofMap, text, e); // TODO add your handling code here:
+            f.setVisible(true);
+        }else{
+            Berechnung.berechnenAusgang(zuege, speditionen);
             GUIKontrolleE guik = new GUIKontrolleE(speditionen, zuege, bahnhofMap, text, e);
             guik.setVisible(true);
+    
         }
-           
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -185,20 +145,21 @@ public class GUIFehlerE extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUIFehlerE.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUISpeditionsAuswahl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUIFehlerE.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUISpeditionsAuswahl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUIFehlerE.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUISpeditionsAuswahl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUIFehlerE.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUISpeditionsAuswahl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                //new GUIFehlerE().setVisible(true);
+                //new SpeditionsAuswahl().setVisible(true);
             }
         });
     }
@@ -206,7 +167,8 @@ public class GUIFehlerE extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    public javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
